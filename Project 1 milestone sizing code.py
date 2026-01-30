@@ -1,6 +1,6 @@
 import numpy as np
 
-#penis
+
 ### we need gross takeoff, empty and feul weight
 
 #start with crew/pax, payload weight (given):
