@@ -115,10 +115,10 @@ plot_WS = np.linspace(0,1.1 * Wing_Loading_TO,100)
 plot_TW = np.linspace(0,1,100)
 
 WS = 150
-TW_Ratio = 0.4
+TW_Ratio = 0.35
 
-plt.plot(W_S(Wing_Loading_TO,plot_TW),plot_TW,label = "Takeoff Constraint")
-plt.plot(plot_WS,TW(plot_WS),label = "Landing Constraint")
+plt.plot(W_S(Wing_Loading_TO,plot_TW),plot_TW,label = "Landing Constraint")
+plt.plot(plot_WS,TW(plot_WS),label = "Takeoff Constraint")
 plt.plot(WS,TW_Ratio,"ro",label =  "Selected Values")
 plt.fill_between(np.linspace(0,Wing_Loading_TO,100),TW(np.linspace(0,Wing_Loading_TO,100)),1.0,color = "green",alpha = 0.25,label="Feasible Region")
 plt.xlabel("Take off Wing Loading (psf)")
