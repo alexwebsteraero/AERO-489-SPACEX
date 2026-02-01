@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-### we need gross takeoff, empty and feul weight
+### we need gross takeoff, empty and fuel weight
 
 #start with crew/pax, payload weight (given):
 crew_mem = 410
@@ -13,7 +13,7 @@ num_ppl = 400 #do crew bags count?
 
 w_baggage = 30 * num_ppl  #lbs
 
-#next split up mission into phases, focus on cruis/loiter. other phases have tables with feul fractions
+#next split up mission into phases, focus on cruise/loiter. other phases have tables with fuel fractions
 
 cruise_range = 3500 + 200 #nm 
 loiter_endurnace = 0.5 #hrs
@@ -24,7 +24,7 @@ reserve_per = 5 #%
 LD_c = 14
 cj_c = 0.7
 
-#assuming cruisng altitude of 35000 ft, mach 0.8, typical of this class of jets
+#assuming cruising altitude of 35000 ft, mach 0.8, typical of this class of jets
 M_c = 0.8
 T_c = -65.61 + 459.67 #R
 a_c = np.sqrt(1.4*1716*T_c)
@@ -36,12 +36,12 @@ cj_l = 0.5
 FF_cruise = np.exp(-cruise_range*cj_c/V_c/LD_c)
 #from endurance eq in notes, using jet eq, accounts for unit conversions
 FF_loiter = np.exp(-loiter_endurnace*cj_l/LD_l)
-#non-cruise/loiter feul fractions are from table in notes, using transport jet
+#non-cruise/loiter fuel fractions are from table in notes, using transport jet
 w_endW0 = 0.99*0.99*0.995*0.98*FF_cruise*FF_loiter*.99*.992
 
 
 
-#5% feul reserves + trapped oil is negligible
+#5% fuel reserves + trapped oil is negligible
 WfW0 = (1 - w_endW0) * (1+reserve_per/100)
 
 #this function gives the empty wieght fraction based on the function from roskam (basing off military patrol props)
@@ -77,7 +77,7 @@ W_f = WfW0 * W_0
 print("Estimated Values:")
 print(f"Gross Takeoff Weight W_0 = {W_0:.2f} lbs")
 print(f"Empty Weight W_E = {W_e:.2f} lbs")
-print(f"Feul Weight W_F = {W_f:.2f} lbs")
+print(f"Fuel Weight W_F = {W_f:.2f} lbs")
 
 #Part 8: Calculating W/S and T/W
 
@@ -114,11 +114,18 @@ def W_S(W_S,T_W):
 plot_WS = np.linspace(0,1.1 * Wing_Loading_TO,100)
 plot_TW = np.linspace(0,1,100)
 
+WS = 150
+TW_Ratio = 0.4
+
 plt.plot(W_S(Wing_Loading_TO,plot_TW),plot_TW,label = "Takeoff Constraint")
 plt.plot(plot_WS,TW(plot_WS),label = "Landing Constraint")
+plt.plot(WS,TW_Ratio,"ro",label =  "Selected Values")
 plt.fill_between(np.linspace(0,Wing_Loading_TO,100),TW(np.linspace(0,Wing_Loading_TO,100)),1.0,color = "green",alpha = 0.25,label="Feasible Region")
 plt.xlabel("Take off Wing Loading (psf)")
 plt.ylabel("Takeoff Thrust to Weight Ratio")
 plt.title("Constraint Diagram")
 plt.legend()
 plt.show()
+
+print(f"The wing area is {W_0/WS:.2f} sq ft")
+print(f"The aircraft thrust is {W_0*TW_Ratio:.2f} lbs")
